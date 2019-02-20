@@ -4,12 +4,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class QuestionRecord {
+public class QuestionRecord implements Question {
 	
 	@Id
 	private String uuid;
-	private Integer lastQuestionID;
-	private String typeQuestion;
+	private Integer nextQuestionID;
+	private String nextTypeQuestion;
 	
 	public String getUuid() {
 		return uuid;
@@ -17,17 +17,17 @@ public class QuestionRecord {
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
-	public Integer getLastQuestionID() {
-		return lastQuestionID;
+	public Integer getNextQuestionId() {
+		return nextQuestionID;
 	}
-	public void setLastQuestionID(Integer lastQuestionID) {
-		this.lastQuestionID = lastQuestionID;
+	public void setNextQuestionID(Integer lastQuestionID) {
+		this.nextQuestionID = lastQuestionID;
 	}
-	public String getTypeQuestion() {
-		return typeQuestion;
+	public String getNextTypeQuestion() {
+		return nextTypeQuestion;
 	}
-	public void setTypeQuestion(String typeQuestion) {
-		this.typeQuestion = typeQuestion;
+	public void setNextQuestionType(String typeQuestion) {
+		this.nextTypeQuestion = typeQuestion;
 	}
 	
 }

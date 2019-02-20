@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Checkbox {
+public class Checkbox implements Question {
 
 	@Id
 	private Integer id;

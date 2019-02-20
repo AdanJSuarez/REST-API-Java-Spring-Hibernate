@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Poll {
+public class Poll implements Question {
 	
 	@Id
 	private Integer id;

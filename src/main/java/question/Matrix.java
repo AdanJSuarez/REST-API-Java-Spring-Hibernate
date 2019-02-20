@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Matrix {
+public class Matrix implements Question {
 
 	@Id
 	private Integer id;
