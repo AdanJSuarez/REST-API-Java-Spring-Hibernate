@@ -3,6 +3,7 @@ package question;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,26 +27,60 @@ public class QuestionService {
 	private Question question;
 	private QuestionRecord questionRecord;
 	
-	public Question getNextQuestion(String id) {
-		questionRecord = questionRecordRepository.findById(id).get(); //Get to solve Optional returned by findById
+	public Question getNextQuestion(String uuid) {
+		questionRecord = questionRecordRepository.findById(uuid).get(); //Get to solve Optional returned by findById
 		Integer nextQuestionId =questionRecord.getNextQuestionId();
-		String  nextQuestionType = questionRecord.getNextTypeQuestion();
+		String  nextQuestionType = questionRecord.getNextQuestionType();
 		question = getQuestion(nextQuestionId, nextQuestionType);
 		
 		//Update questionRecord
-		updateQuestion(id, nextQuestionId, nextQuestionType);
+		updateQuestionRecord(uuid, nextQuestionId, nextQuestionType);
 		
 		return question;
 	}
+	public void updateAnswerRecord(String uuid, Question questionReturned) {
+		Integer questionId = questionReturned.getId();
+		String questionType = questionReturned.getQuestionType();
+		switch (questionType) {
+		case "Trivia":
+			Trivia triviaQuestionReturned = (Trivia) questionReturned;
+			Boolean triviaAnswerReturned = triviaQuestionReturned.getAnswerReturned();
+			Trivia triviaQuestion = triviaRepository.findById(questionId).get();
+			triviaQuestion.addRecordAnswerReturned(triviaAnswerReturned);
+			triviaRepository.save(triviaQuestion);
+			break;
+		case "Poll":
+			Poll pollQuestionReturned = (Poll) questionReturned;
+			String pollAnswerReturned = pollQuestionReturned.getAnswerReturned();
+			Poll pollQuestion = pollRepository.findById(questionId).get();
+			pollQuestion.addRecordAnswerReturned(pollAnswerReturned);
+			pollRepository.save(pollQuestion);
+			break;
+		case "Checkbox":
+			Checkbox checkboxQuestionReturned = (Checkbox) questionReturned;
+			List<String> checkboxAnswerReturned = checkboxQuestionReturned.getAnswerReturned();
+			Checkbox checkboxQuestion = checkboxRepository.findById(questionId).get();
+			checkboxQuestion.addRecordAnswerReturned(checkboxAnswerReturned);
+			checkboxRepository.save(checkboxQuestion);
+			break;
+		default:
+			Matrix matrixQuestionReturned = (Matrix) questionReturned;
+			Map<String, String> matrixAnswerReturned = matrixQuestionReturned.getAnswerReturned();
+			Matrix matrixQuestion = matrixRepository.findById(questionId).get();
+			matrixQuestion.addAnswerReturned(matrixAnswerReturned);
+			matrixRepository.save(matrixQuestion);
+			break;
+		}
+	}
 
-	private void updateQuestion(String id, Integer nextQuestionId, String nextQuestionType) {
+	private void updateQuestionRecord(String id, Integer nextQuestionId, String nextQuestionType) {
 		int newQuestionId;
 		String newQuestionType;
 		newQuestionType = getNewQuestionType(nextQuestionType);
 		newQuestionId = getNewQuestionIndex(nextQuestionId, newQuestionType);
 		QuestionRecord nextQuestionRecord = new QuestionRecord();
 		nextQuestionRecord.setUuid(id);
-		nextQuestionRecord.setNextQuestionID(newQuestionId);
+		nextQuestionRecord.setNextQuestionId(newQuestionId);
 		nextQuestionRecord.setNextQuestionType(newQuestionType);
 		questionRecordRepository.save(nextQuestionRecord);
 	}

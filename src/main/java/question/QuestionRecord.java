@@ -8,8 +8,8 @@ public class QuestionRecord implements Question {
 	
 	@Id
 	private String uuid;
-	private Integer nextQuestionID;
-	private String nextTypeQuestion;
+	private Integer nextQuestionId;
+	private String nextQuestionType;
 	
 	public String getUuid() {
 		return uuid;
@@ -18,16 +18,26 @@ public class QuestionRecord implements Question {
 		this.uuid = uuid;
 	}
 	public Integer getNextQuestionId() {
-		return nextQuestionID;
+		return nextQuestionId;
 	}
-	public void setNextQuestionID(Integer lastQuestionID) {
-		this.nextQuestionID = lastQuestionID;
+	public void setNextQuestionId(Integer lastQuestionId) {
+		this.nextQuestionId = lastQuestionId;
 	}
-	public String getNextTypeQuestion() {
-		return nextTypeQuestion;
+	public String getNextQuestionType() {
+		return nextQuestionType;
 	}
 	public void setNextQuestionType(String typeQuestion) {
-		this.nextTypeQuestion = typeQuestion;
+		this.nextQuestionType = typeQuestion;
+	}
+	@Override
+	public Integer getId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public String getQuestionType() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }
