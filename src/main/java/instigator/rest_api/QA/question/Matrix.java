@@ -1,11 +1,16 @@
-package question;
+package instigator.rest_api.QA.question;
 
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
+import instigator.rest_api.QA.answer.Answer;
 
 @Entity
 public class Matrix implements Question {
@@ -14,11 +19,16 @@ public class Matrix implements Question {
 	private Integer id;
 	private String questionType = "Matrix";
 	private String question;
+	@OneToOne
+	private Answer answerOffered;
+	@OneToOne
+	private Answer answerReturned;
 	@OneToMany
-	private Map<String, List<String>> answerOffered;
-	private Map<String, String>answerReturned;
-	@OneToMany
-	private List<Map<String, String>> recordAnswerReturned;
+	private List<Answer> recordAnswerReturned;
+	
+	public Matrix() {
+		id = 1;
+	}
 	
 	@Override
 	public Integer getId() {
@@ -40,22 +50,22 @@ public class Matrix implements Question {
 	public void setQuestionType(String questionType) {
 		this.questionType = questionType;
 	}
-	public Map<String, List<String>> getAnswerOffered() {
+	public Answer getAnswerOffered() {
 		return answerOffered;
 	}
-	public void setAnswerOffered(Map<String, List<String>> answerOffered) {
+	public void setAnswerOffered(Answer answerOffered) {
 		this.answerOffered = answerOffered;
 	}
-	public Map<String, String> getAnswerReturned() {
+	public Answer getAnswerReturned() {
 		return answerReturned;
 	}
-	public void setAnswerReturned(Map<String, String> answerReturned) {
+	public void setAnswerReturned(Answer answerReturned) {
 		this.answerReturned = answerReturned;
 	}
-	public List<Map<String, String>> getRecordAnswerReturned() {
+	public List<Answer> getRecordAnswerReturned() {
 		return recordAnswerReturned;
 	}
-	public void addAnswerReturned(Map<String, String> answer) {
+	public void addAnswerReturned(Answer answer) {
 		recordAnswerReturned.add(answer);
 	}
 	

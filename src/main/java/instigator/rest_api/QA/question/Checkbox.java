@@ -1,23 +1,30 @@
-package question;
+package instigator.rest_api.QA.question;
 
 import java.util.List;
+import java.util.Map;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
+import instigator.rest_api.QA.answer.Answer;
 
 @Entity
-public class Poll implements Question {
-	
+public class Checkbox implements Question {
+
 	@Id
 	private Integer id;
-	private String questionType = "Poll";
+	private String questionType = "Checkbox";
 	private String question;
+	@OneToOne
+	private Answer answerOffered;
+	@OneToOne
+	private Answer answerReturned;
 	@OneToMany
-	private List<String> answerOffered;
-	private String answerReturned;
-	@OneToMany
-	private List<String> recordAnswerReturned; 
+	private List<Answer> recordAnswerReturned;
 	
 	@Override
 	public Integer getId() {
@@ -39,22 +46,22 @@ public class Poll implements Question {
 	public void setQuestion(String question) {
 		this.question = question;
 	}
-	public List<String> getAnswerOffered() {
+	public Answer getAnswerOffered() {
 		return answerOffered;
 	}
-	public void setAnswerOffered(List<String> answerOffered) {
+	public void setAnswerOffered(Answer answerOffered) {
 		this.answerOffered = answerOffered;
 	}
-	public String getAnswerReturned() {
+	public Answer getAnswerReturned() {
 		return answerReturned;
 	}
-	public void setAnswerReturned(String answerReturned) {
+	public void setAnswerReturned(Answer answerReturned) {
 		this.answerReturned = answerReturned;
 	}
-	public List<String> getRecordAnswerReturned() {
+	public List<Answer> getRecordAnswerReturned() {
 		return recordAnswerReturned;
 	}
-	public void addRecordAnswerReturned(String recordAnswerReturned) {
+	public void addRecordAnswerReturned(Answer recordAnswerReturned) {
 		this.recordAnswerReturned.add(recordAnswerReturned);
 	}
 	

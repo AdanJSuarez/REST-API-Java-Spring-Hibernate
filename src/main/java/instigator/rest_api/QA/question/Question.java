@@ -1,8 +1,7 @@
 /**
  * 
  */
-package question;
-
+package instigator.rest_api.QA.question;
 
 public interface Question {
 
