@@ -1,41 +1,47 @@
 package instigator.rest_api.QA.question;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class QuestionRecord {
+public class QuestionRecord { 
 	
 	@Id
 	private String uuid;
 	@OneToMany
-	private List<Trivia> listOfTrivia;
+	private List<Question> listOfTrivia;
 	@OneToMany
-	private List<Poll> listOfPoll;
+	private List<Question> listOfPoll;
 	@OneToMany
-	private List<Checkbox> listOfCheckbox;
+	private List<Question> listOfCheckbox;
 	@OneToMany
-	private List<Matrix> listOfMatrix;
+	private List<Question> listOfMatrix;
 	@ElementCollection
-	private List<Integer> listOfIndex; 
+	private List<Integer> listOfIndex;
 	private String nextQuestionType;
 	
-	public QuestionRecord() {}
-	
-	public QuestionRecord(String uuid) {
-		this.uuid = uuid;
-		listOfTrivia = new ArrayList<Trivia>();
+	public QuestionRecord() {
+		uuid = "aaa";
+		listOfTrivia = new ArrayList<>();
 		listOfPoll = new ArrayList<>();
 		listOfCheckbox = new ArrayList<>();
 		listOfMatrix = new ArrayList<>();
-		listOfIndex = new ArrayList<>(); 
-		nextQuestionType = "Trivia";
+		listOfIndex = new ArrayList<>(Arrays.asList(0, 0, 0, 0)); 
+	}
+	
+	public QuestionRecord(String uuid) {
+		this.uuid = uuid;
+		listOfTrivia = new ArrayList<>();
+		listOfPoll = new ArrayList<>();
+		listOfCheckbox = new ArrayList<>();
+		listOfMatrix = new ArrayList<>();
+		listOfIndex = new ArrayList<>(Arrays.asList(0, 0, 0, 0)); 
 		System.out.println("--- QuestionRecord initialized");
 	}
 	
@@ -45,33 +51,39 @@ public class QuestionRecord {
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
-	public Trivia getTriviaByIndex(int index) {
+	public Question getTriviaByIndex(int index) {
 		return listOfTrivia.get(index);
 	}
-	public void addTrivia(Trivia trivia) {
+	public void addTrivia(Question trivia) {
 		this.listOfTrivia.add(trivia);
+		nextQuestionType = "Trivia";
 	}
-	public Poll getPollByIndex(int index) {
+	public Question getPollByIndex(int index) {
 		return listOfPoll.get(index);
 	}
-	public void addPoll(Poll poll) {
+	public void addPoll(Question poll) {
 		this.listOfPoll.add(poll);
+		nextQuestionType = "Poll";
 	}
-	public Checkbox getCheckboxByIndex(int index) {
+	public Question getCheckboxByIndex(int index) {
 		return listOfCheckbox.get(index);
 	}
-	public void addCheckbox(Checkbox checkbox) {
+	public void addCheckbox(Question checkbox) {
 		this.listOfCheckbox.add(checkbox);
+		nextQuestionType = "Checkbox";
 	}
-	public Matrix getMatrixByIndex(int index) {
+	public Question getMatrixByIndex(int index) {
 		return listOfMatrix.get(index);
 	}
-	public void addMatrix(Matrix matrix) {
+	public void addMatrix(Question matrix) {
 		this.listOfMatrix.add(matrix);
+		nextQuestionType = "Matrix";
 	}
-	/*
+	
+	/**
 	 * Return list of index where:
-	 *  [0] is for trivia, [1] for poll, [2] for checkbox and [3] for matrix
+	 * [0] is for trivia, [1] for poll, [2] for checkbox and [3] for matrix
+	 * @return List<Integer>
 	 */
 	public List<Integer> getListOfIndex() {
 		return listOfIndex;
@@ -79,23 +91,32 @@ public class QuestionRecord {
 	public void setNextQuestionIndex(int ix, Integer index) {
 		this.listOfIndex.set(ix, index);
 	}
+
 	public String getNextQuestionType() {
 		return nextQuestionType;
 	}
 	public void setNextQuestionType(String typeQuestion) {
 		this.nextQuestionType = typeQuestion;
 	}
-	public List<Trivia> getListOfTrivia() {
+	public List<Question> getListOfTrivia() {
 		return listOfTrivia;
 	}
-	public List<Poll> getListOfPoll() {
+	public List<Question> getListOfPoll() {
 		return listOfPoll;
 	}
-	public List<Checkbox> getListOfCheckbox() {
+	public List<Question> getListOfCheckbox() {
 		return listOfCheckbox;
 	}
-	public List<Matrix> getListOfMatrix() {
+	public List<Question> getListOfMatrix() {
 		return listOfMatrix;
 	}
+
+	@Override
+	public String toString() {
+		return "QuestionRecord [uuid=" + uuid + ", listOfTrivia=" + listOfTrivia + ", listOfPoll=" + listOfPoll
+				+ ", listOfCheckbox=" + listOfCheckbox + ", listOfMatrix=" + listOfMatrix + ", listOfIndex="
+				+ listOfIndex + ", nextQuestionType=" + nextQuestionType + "]";
+	}
+	
 	
 }
