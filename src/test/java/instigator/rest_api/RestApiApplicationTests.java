@@ -11,6 +11,7 @@ public class RestApiApplicationTests {
 
 	@Test
 	public void contextLoads() {
+		//Default test to check every works properly.
 	}
 
 }

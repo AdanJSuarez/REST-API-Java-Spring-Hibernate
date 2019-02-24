@@ -36,7 +36,7 @@ public class MainController {
 
 	@RequestMapping(method=RequestMethod.GET, value="/test")
 	public @ResponseBody String response () {
-		initializeQuestion(); 
+//		initializeQuestion(); 
 		System.out.println("--- test");
 		return "--- Done!!!";
 	}
@@ -128,7 +128,7 @@ public class MainController {
 		matrix1.setQuestionType("Matrix");
 		matrix1.setQuestion("Please tell us a bit about yourself?");
 		matrix1.setAnswerOffered(answerOfferedMatrix);
-		matrix1.addRecordAnswerReturned(answerOfferedMatrix);
+//		matrix1.addRecordAnswerReturned(answerOfferedMatrix);
 		System.out.println(matrix1.toString());
 		questionRepository.save(matrix1);
 		System.out.println("Matrix questions initialized");

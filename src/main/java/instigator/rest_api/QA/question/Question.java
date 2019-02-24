@@ -40,6 +40,7 @@ public class Question implements IQuestion {
 		recordAnswerReturned = new ArrayList<>();
 	}
     
+    //Getters and Setters
 	@Override
 	public Integer getId() {
 		return id;
@@ -73,11 +74,16 @@ public class Question implements IQuestion {
 	public void setAnswerReturned(Answer answerReturned) {
 		this.answerReturned = answerReturned;
 	}
-	public void addRecordAnswerReturned(Answer answer) {
-		recordAnswerReturned.add(answer);
-	}
 	public List<Answer> getRecordAnswerReturned() {
 		return recordAnswerReturned;
+	}
+	
+	/**
+	 * Add returned answer to list of answer.
+	 * @param answer
+	 */
+	public void addRecordAnswerReturned(Answer answer) {
+		recordAnswerReturned.add(answer);
 	}
 	@Override
 	public void setRecordAnswerReturned(List<Answer> recordAnswerReturned) {

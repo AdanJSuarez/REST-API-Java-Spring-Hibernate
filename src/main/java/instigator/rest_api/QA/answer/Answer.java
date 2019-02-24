@@ -25,6 +25,7 @@ public class Answer {
 		this.answer = answer;
 	}
 	
+	//Getters and Setters
 	public Integer getId() {
 		return id;
 	}

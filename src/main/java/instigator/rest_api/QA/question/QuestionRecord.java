@@ -54,6 +54,10 @@ public class QuestionRecord {
 	public Question getTriviaByIndex(int index) {
 		return listOfTrivia.get(index);
 	}
+	/**
+	 * Add question Trivia to list of trivia and set nextQuestionType to Trivia.
+	 * @param trivia
+	 */
 	public void addTrivia(Question trivia) {
 		this.listOfTrivia.add(trivia);
 		nextQuestionType = "Trivia";
@@ -61,6 +65,10 @@ public class QuestionRecord {
 	public Question getPollByIndex(int index) {
 		return listOfPoll.get(index);
 	}
+	/**
+	 * Add question Poll to list of poll and set nextQuestionType to Poll.
+	 * @param poll
+	 */
 	public void addPoll(Question poll) {
 		this.listOfPoll.add(poll);
 		nextQuestionType = "Poll";
@@ -68,6 +76,10 @@ public class QuestionRecord {
 	public Question getCheckboxByIndex(int index) {
 		return listOfCheckbox.get(index);
 	}
+	/**
+	 * Add question Checkbox to list of checkbox and set nextQuestionType to Checkbox.
+	 * @param checkbox
+	 */
 	public void addCheckbox(Question checkbox) {
 		this.listOfCheckbox.add(checkbox);
 		nextQuestionType = "Checkbox";
@@ -75,6 +87,10 @@ public class QuestionRecord {
 	public Question getMatrixByIndex(int index) {
 		return listOfMatrix.get(index);
 	}
+	/**
+	 * Add question Matrix to list of matrix and set nextQuestionType to Matrix.
+	 * @param matrix
+	 */
 	public void addMatrix(Question matrix) {
 		this.listOfMatrix.add(matrix);
 		nextQuestionType = "Matrix";

@@ -8,6 +8,10 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = {"instigator.rest_api.QA"})
 public class RestApiApplication {
 	
+	/**
+	 * Software entry point.
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		SpringApplication.run(RestApiApplication.class, args);
 		System.out.println("--- Server initialized");

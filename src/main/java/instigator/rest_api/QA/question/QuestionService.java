@@ -46,7 +46,6 @@ public class QuestionService {
 	 * @param questionReturned
 	 */
 	public void updateAnswerRecord(IQuestion questionReturned) {
-		System.out.println("----yyyy-----");
 		Integer questionId = questionReturned.getId();
 		Answer answerReturned = questionReturned.getAnswerReturned();
 		Answer newAnswer = new Answer(answerReturned.getAnswer());
@@ -54,6 +53,7 @@ public class QuestionService {
 		Question question = questionRepository.findById(questionId).get();
 		question.addRecordAnswerReturned(newAnswer);
 		questionRepository.save(question);
+		System.out.println("--- Answer stored");
 	}
 	/**
 	 * Return question based of the index record.
