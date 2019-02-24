@@ -21,6 +21,9 @@ public class Answer {
 	public Answer() {
 		answer = new HashMap<>();
 	}
+	public Answer(Map<String, String> answer) {
+		this.answer = answer;
+	}
 	
 	public Integer getId() {
 		return id;

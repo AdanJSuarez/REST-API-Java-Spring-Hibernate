@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import instigator.rest_api.QA.answer.Answer;
+import instigator.rest_api.QA.answer.AnswerRepository;
 @Service
 public class QuestionService {
 	
@@ -17,6 +18,8 @@ public class QuestionService {
 	private QuestionRecordRepository questionRecordRepository;
 	@Autowired
 	private QuestionRepository questionRepository;
+	@Autowired
+	private AnswerRepository answerRepository;
 	private IQuestion question;
 	private QuestionRecord questionRecord;
 	
@@ -46,9 +49,10 @@ public class QuestionService {
 		System.out.println("----yyyy-----");
 		Integer questionId = questionReturned.getId();
 		Answer answerReturned = questionReturned.getAnswerReturned();
+		Answer newAnswer = new Answer(answerReturned.getAnswer());
+		answerRepository.save(newAnswer);
 		Question question = questionRepository.findById(questionId).get();
-		question.addRecordAnswerReturned(answerReturned);
-		System.out.println(question);
+		question.addRecordAnswerReturned(newAnswer);
 		questionRepository.save(question);
 	}
 	/**
