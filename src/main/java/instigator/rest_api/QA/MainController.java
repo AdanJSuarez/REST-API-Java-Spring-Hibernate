@@ -73,7 +73,7 @@ public class MainController {
 	 * @param questionId
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.POST, value="/deleteQuestion/{questionId}/UUID/{uuid}")
+	@RequestMapping(method=RequestMethod.DELETE, value="/questionId/{questionId}/UUID/{uuid}")
 	public IQuestion deleteQuestion(@PathVariable("uuid") String uuid, @PathVariable("questionId") String questionId) {
 		return questionService.deleteQuestion(uuid, questionId);
 	}
