@@ -31,8 +31,7 @@ public class MainController {
 	}
 	
 	/**
-	 * REST. Return the next question in sequential order. Start again went hit the end
-	 * of the list of questions. 
+	 * REST. Return the next question in sequential order.
 	 * @param uuid
 	 * @return IQuestion
 	 */

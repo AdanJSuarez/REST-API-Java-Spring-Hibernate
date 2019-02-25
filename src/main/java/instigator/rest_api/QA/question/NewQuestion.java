@@ -55,7 +55,7 @@ public class NewQuestion implements IQuestion {
 
 	@Override
 	public void setRecordAnswerReturned(List<Answer> recordAnswerReturned) {
-		// TODO Auto-generated method stub
+		// Do nothing
 
 	}
 

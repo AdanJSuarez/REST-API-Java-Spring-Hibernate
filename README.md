@@ -189,15 +189,17 @@ Where the aa1 is the UUID from which we want the question. It returns a question
 		"recordAnswerReturned": null
 	}
 
-Where "id" is the question id -this is unique-. 
+- "id" is the question id -this is unique-. 
 
-"questionType" is the type of question. question is the question.
+- "questionType" is the type of question. 
 
-"answerOffered" is the options we give to he user.
+- "question" is the question.
 
-"answerReturned" is the field that the embed has to fill with the answer given by the user as explained before.
+- "answerOffered" is the options we give to he user.
 
-"recordAnswerReturned" is the field we use to store the answer in the database. The embed has nothing to do with it.
+- "answerReturned" is the field that the embed has to fill with the answer given by the user as explained before.
+
+- "recordAnswerReturned" is the field we use to store the answer in the database. The embed has nothing to do with it.
 
 #### Return an answer for the embed:
 
@@ -214,7 +216,7 @@ Where the aa1 is the UUID and the body of the request has to include the same qu
 	http://localhost:8080
 
 - For simplicity the database runs in a docker container, MySQL database 5.7. To download the image and run the container:
-(Note: if you don't use docker and prefer install MySQL, skip the two following steps, and install it in your own)
+(Note: if you don't use docker and prefer install MySQL, skip the two following steps)
 
 	$ docker pull mysql
 
@@ -238,7 +240,7 @@ Where the aa1 is the UUID and the body of the request has to include the same qu
 	
 After the first run, when the tables are created, we set back "spring.jpa.hibernate.ddl-auto" to "update".
 
-- The project is a maven project, in order to use a maven wapper (to make owr life easy) we need to run:
+- The project is a maven project, in order to use a maven wapper (to make our life easier) we need to run:
 
 	$ mvn -N io.takari:maven:wrapper
 	
@@ -258,3 +260,5 @@ After the first run, when the tables are created, we set back "spring.jpa.hibern
 
 	$ sudo ./mvnw test
 	
+
+Adan J. Suarez
