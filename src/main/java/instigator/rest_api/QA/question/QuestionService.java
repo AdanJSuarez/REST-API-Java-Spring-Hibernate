@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.persistence.Index;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +55,106 @@ public class QuestionService {
 		Question question = questionRepository.findById(questionId).get();
 		question.addRecordAnswerReturned(newAnswer);
 		questionRepository.save(question);
-		System.out.println("--- Answer stored");
+		System.out.println("--- Answer saved");
+	}
+	public String setNewQuestion(String uuid, NewQuestion newQuestion) {
+		Integer index;
+		Question question = new Question();
+		Answer answer = new Answer();
+		String questionType = newQuestion.getQuestionType();
+		try {
+			questionRecord = questionRecordRepository.findById(uuid).get();
+		} catch (NoSuchElementException e) {
+			questionRecord = new QuestionRecord(uuid);
+		}
+		question.setQuestionType(questionType);
+		question.setQuestion(newQuestion.getQuestion());
+		answer.setAnswer(newQuestion.getAnswerOffered());
+		question.setAnswerOffered(answer);
+		answerRepository.save(answer);
+		questionRepository.save(question);
+		switch (questionType) {
+		case "Trivia":
+			questionRecord.addTrivia(question);
+			try {
+				index = questionRecord.getListOfIndex().get(0) + 1;
+			} catch (Exception e) {
+				index = 0;
+			}
+			questionRecord.setNextQuestionIndex(0, index);
+			questionRecordRepository.save(questionRecord);
+			break;
+		case "Poll":
+			questionRecord.addPoll(question);
+			try {
+				index = questionRecord.getListOfIndex().get(1) + 1;
+			} catch (Exception e) {
+				index = 0;
+			}
+			questionRecord.setNextQuestionIndex(1, index);
+			questionRecordRepository.save(questionRecord);
+			break;
+		case "Checkbox":
+			questionRecord.addCheckbox(question);
+			try {
+				index = questionRecord.getListOfIndex().get(2) + 1;
+			} catch (Exception e) {
+				index = 0;
+			}
+			questionRecord.setNextQuestionIndex(2, index);
+			questionRecordRepository.save(questionRecord);
+			break;
+		default:
+			questionRecord.addMatrix(question);
+			try {
+				index = questionRecord.getListOfIndex().get(3) + 1;
+			} catch (Exception e) {
+				index = 0;
+			}
+			questionRecord.setNextQuestionIndex(3, index);
+			questionRecordRepository.save(questionRecord);
+			break;
+		}
+		System.out.println("--- Question saved");
+		return "--- Question saved!";
+	}
+	public IQuestion deleteQuestion(String uuid, String qId) {
+		Question question;
+		Integer questionId = Integer.parseInt(qId);;
+		try {
+			question = questionRepository.findById(questionId).get();
+		} catch (NoSuchElementException e) {
+			return new QuestionEmpty(uuid);
+		}
+		questionRecord = questionRecordRepository.findById(uuid).get();
+		String questionType = question.getQuestionType();
+		System.out.println(questionId);
+		questionRepository.deleteById(questionId);
+		answerRepository.deleteById(question.getAnswerOffered().getId());
+		switch (questionType) {
+		case "Trivia":
+			if (questionRecord.getListOfIndex().get(0) == questionId) {
+			questionRecord.setNextQuestionIndex(0, questionRecord.getListOfTrivia().get(0).getId());
+			}
+			
+			break;
+		case "Poll":
+			if (questionRecord.getListOfIndex().get(1) == questionId) {
+			questionRecord.setNextQuestionIndex(1, questionRecord.getListOfPoll().get(0).getId());
+			}
+			break;
+		case "Checkbox":
+			if (questionRecord.getListOfIndex().get(2) == questionId) {
+			questionRecord.setNextQuestionIndex(2, questionRecord.getListOfCheckbox().get(0).getId());
+			}
+			break;
+		default:
+			if (questionRecord.getListOfIndex().get(3) == questionId) {
+				questionRecord.setNextQuestionIndex(3, questionRecord.getListOfMatrix().get(0).getId());
+				}
+			break;
+		}
+		return new QuestionEmpty("--- Question deleted!");
 	}
 	/**
 	 * Return question based of the index record.
@@ -81,7 +182,6 @@ public class QuestionService {
 		questionRecord.setNextQuestionType(newQuestionType);
 		updateNextQuestionIndex(newQuestionType);
 		questionRecordRepository.save(questionRecord);
-		//TODO: Modify to accept less than 4 questions
 	}
 	
 	/**

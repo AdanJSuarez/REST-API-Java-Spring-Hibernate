@@ -32,7 +32,7 @@ public class QuestionRecord {
 		listOfPoll = new ArrayList<>();
 		listOfCheckbox = new ArrayList<>();
 		listOfMatrix = new ArrayList<>();
-		listOfIndex = new ArrayList<>(Arrays.asList(0, 0, 0, 0)); 
+		listOfIndex = new ArrayList<>(); 
 	}
 	
 	public QuestionRecord(String uuid) {
@@ -41,7 +41,7 @@ public class QuestionRecord {
 		listOfPoll = new ArrayList<>();
 		listOfCheckbox = new ArrayList<>();
 		listOfMatrix = new ArrayList<>();
-		listOfIndex = new ArrayList<>(Arrays.asList(0, 0, 0, 0)); 
+		listOfIndex = new ArrayList<>(); 
 		System.out.println("--- QuestionRecord initialized");
 	}
 	

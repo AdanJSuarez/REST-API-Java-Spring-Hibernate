@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>instigator</groupId>
 	<artifactId>rest_api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1-SNATSHOT</version>
 	<name>rest_api</name>
 	<description>Project for Spring Boot</description>
 
