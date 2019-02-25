@@ -26,7 +26,7 @@ There are four kind of question: trivia, poll, checkbox and matrix. I end up wit
 
 #### Trivia: 
 
-In trivia questions the Hashmap correspond with row of the questions for example in the question: 
+In trivia questions the Hashmap key/value pair corresponds with a row of the questions, for example, in the question: 
 
 Which team won the 2017 super bowl?
 Falcons
@@ -51,7 +51,7 @@ An answer given by the embed to the above question is:
 		}
 	}
 	
-Meaning that the user gave the write answer. In case or wrong answer could be:
+Meaning that the user gave the write answer. In case of wrong answer, it could be:
 
 	{
 		"questionType": "Trivia",
@@ -76,7 +76,7 @@ Similar to trivia but this time we don't provide any right and wrong answer, so 
 	
 	poll.put("BMW", "");
 
-The answer could be return the question with the answer selected included as simple as:
+The embed will return the question, with the answer included, as simple as:
 
 	{
 		"questionType": "Poll",
@@ -91,7 +91,7 @@ The answer could be return the question with the answer selected included as sim
 
 #### Checkbox:
 
-The same that before but checkbox let the user select more that one answer so the embeb include "true" in every answer selected: 
+The same that before but checkbox let the user selects more that one answer so the embeb include "true" in every answer selected: 
 
 	{	
 		"questionType": "Poll",
@@ -108,7 +108,7 @@ The same that before but checkbox let the user select more that one answer so th
 
 #### Matrix:
 
-Matrix is a bit more complex but it still easy to follow. Instead of represent rows as before, the hashmap represent columns, and the way to separate the different answer is by dividing it with pipes "|". Parse separations by pipe is quite easy too.
+Matrix is a bit more complex but it still easy to follow. The key/value pair, instead of represents rows as before, the hashmap represent columns, and the way to separate the different answers is by dividing it with pipes "|". Parse separations by pipe is quite easy too.
 In the example given, the first column is part of the question: 
 
 	matrix.put("Age/Gender","<18|18 to 35|35 to 55|> 55")
@@ -124,7 +124,7 @@ The embed just need to set the answer in the right place, in my particular case 
 
 #### Set a question in database:
 
-It has a REST API to include questions and answer in the database the way is so easy. We just need to make a POST request with the following URL: 
+It has a REST API to include questions and answer in the database. We just need to make a POST request with the following URL: 
 	
 	http://localhost:8080/newQuestion/UUID/aa1
 	
@@ -142,7 +142,8 @@ Where aa1 is the UUID at witch you want to include the question, and the body ha
 			"Vigo": ""
 		}
 	}
-	
+or
+
 	{
 		"questionType": "Trivia",
 		"question": "Which team won the 2017 super bowl?",
@@ -152,7 +153,7 @@ Where aa1 is the UUID at witch you want to include the question, and the body ha
 		}
 	}
 
-A couple of considerations, the question type has to begin by capital letter as the examples. The field have to be exactly those. Is only the answerOffered that is flexible as explained before.
+A couple of considerations, the question type has to begin by capital letter as the examples. The fields have to be exactly those. It's only the answerOffered what is flexible as explained before.
 Remember to include at least one question of each type and try to include the same number of each.
 
 #### Delete question from database:
@@ -161,7 +162,7 @@ We just need to make a DELETE request with the following URL:
 
 	http://localhost:8080/deleteQuestion/14/UUID/aa1
 	
-Where 14 is the specific questionId and aa1 the UUID of the user. An important note here, the way the data persist in the database make that every question has its own Id so there aren't two question with the same Id even from different users, so we can identify the question quite easy. We included the UUID, that you can guess it is not needed, because of the questions Id, as a reference and help to identify questions-user.
+Where 14 is the specific questionId and aa1 the UUID of the user. An important note here, the way the data persist in the database make that every question has its own Id, so there aren't two question with the same Id even from different users, so we can identify the question quite easy. We included the UUID, that you can guess it is not needed because of the questions Id, as a reference and help to identify questions-user.
 
 #### Make a question request:
 
@@ -169,15 +170,42 @@ The whole idea is to serve up question to the embed and for that this is the mos
 
 	http://localhost:8080/UUID/aa1
 	
-Where the aa1 is the UUID to witch we want the question. It returns a question with the format explained before.
+Where the aa1 is the UUID from which we want the question. It returns a question with the format explained as follow:
+
+	{
+		"id": 16,
+		"questionType": "Trivia",
+		"question": "What's the worst futbol team in Canary Island ?",
+		"answerOffered": {
+			"id": 15,
+			"answer": {
+			"Atletico de Madrid": "",
+			"Las Palmas": "true",
+			"Real Madrid": "",
+			"Tenerife": ""
+			}
+		},
+		"answerReturned": null,
+		"recordAnswerReturned": null
+	}
+
+Where "id" is the question id -this is unique-. 
+
+"questionType" is the type of question. question is the question.
+
+"answerOffered" is the options we give to he user.
+
+"answerReturned" is the field that the embed has to fill with the answer given by the user as explained before.
+
+"recordAnswerReturned" is the field we use to store the answer in the database. The embed has nothing to do with it.
 
 #### Return an answer for the embed:
 
-Once the user has answer the question the embed has to return this answer to store it in the database. The way to do that is to make a POST request to the following URL:
+Once the user has answered the question, the embed has to return this answer to store it in the database. The way to do that is to make a POST request to the following URL:
 
 	http://localhost:8080/UUID/aa1
 	
-Where the aa1 is the UUID and the body of the request has to include the same question receive in the question request but with the answer included in the fill answerReturned.
+Where the aa1 is the UUID and the body of the request has to include the same question receive in the question request but with the answer included in the field "answerReturned".
 
 #### Set everything up:
 
@@ -186,12 +214,13 @@ Where the aa1 is the UUID and the body of the request has to include the same qu
 	http://localhost:8080
 
 - For simplicity the database runs in a docker container, MySQL database 5.7. To download the image and run the container:
+(Note: if you don't use docker and prefer install MySQL, skip the two following steps, and install it in your own)
 
 	$ docker pull mysql
 
 	$ sudo docker run -p 3306:3306 --name db_questions -e MYSQL_ROOT_PASSWORD=myPW -d mysql:5.7
 	
-- Once the docker is running, to create the db we need to run the following queries:
+- Once the docker is running, to create the db we need to run the following query:
 	
 	create database db_questions;
 	
@@ -202,6 +231,12 @@ Where the aa1 is the UUID and the body of the request has to include the same qu
 - We give it all permissions (Note: In production we must limit the permissions):
 
 	grant all on db_questions.* to 'springuser'@'%';
+
+- The internal structure and the tables are created by the software so the first time we run it we need to set:
+	
+	src/main/resources -> application.properties -> spring.jpa.hibernate.ddl-auto=create
+	
+After the first run, when the tables are created, we set back "spring.jpa.hibernate.ddl-auto" to "update".
 
 - The project is a maven project, in order to use a maven wapper (to make owr life easy) we need to run:
 
