@@ -1,24 +1,26 @@
 package instigator.rest_api.QA.question;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class QuestionNext {
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
-	private Integer trivia;
-	private Integer poll;
-	private Integer checkbox;
-	private Integer matrix;
+	private Integer triviaIndex;
+	private Integer pollIndex;
+	private Integer checkboxIndex;
+	private Integer matrixIndex;
 	
 	public QuestionNext() {
-		id = 1;
-		trivia = 0;
-		poll = 0;
-		checkbox = 0;
-		matrix = 0;
+		triviaIndex = null;
+		pollIndex = null;
+		checkboxIndex = null;
+		matrixIndex = null;
 	}
 
 	public Integer getId() {
@@ -29,36 +31,51 @@ public class QuestionNext {
 		this.id = id;
 	}
 
-	public Integer getTrivia() {
-		return trivia;
+	public Integer getTriviaIndex() {
+		return triviaIndex;
 	}
 
-	public void setTrivia(Integer trivia) {
-		this.trivia = trivia;
+	public void setTriviaIndex(Integer trivia) {
+		this.triviaIndex = trivia;
 	}
 
-	public Integer getPoll() {
-		return poll;
+	public Integer getPollIndex() {
+		return pollIndex;
 	}
 
-	public void setPoll(Integer poll) {
-		this.poll = poll;
+	public void setPollIndex(Integer poll) {
+		this.pollIndex = poll;
 	}
 
-	public Integer getCheckbox() {
-		return checkbox;
+	public Integer getCheckboxIndex() {
+		return checkboxIndex;
 	}
 
-	public void setCheckbox(Integer checkbox) {
-		this.checkbox = checkbox;
+	public void setCheckboxIndex(Integer checkbox) {
+		this.checkboxIndex = checkbox;
 	}
 
-	public Integer getMatrix() {
-		return matrix;
+	public Integer getMatrixIndex() {
+		return matrixIndex;
 	}
 
-	public void setMatrix(Integer matrix) {
-		this.matrix = matrix;
+	public void setMatrixIndex(Integer matrix) {
+		this.matrixIndex = matrix;
 	}
+	public Integer getSizeQuestionNext() {
+		Integer result = 0;
+		if (triviaIndex != null) result++;
+		if (pollIndex != null) result++;
+		if (checkboxIndex != null) result++;
+		if (matrixIndex != null) result++;
+		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "QuestionNext [id=" + id + ", triviaIndex=" + triviaIndex + ", pollIndex=" + pollIndex
+				+ ", checkboxIndex=" + checkboxIndex + ", matrixIndex=" + matrixIndex + "]";
+	}
+	
 	
 }

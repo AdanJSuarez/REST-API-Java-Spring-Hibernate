@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import javax.persistence.Index;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import instigator.rest_api.QA.answer.Answer;
 import instigator.rest_api.QA.answer.AnswerRepository;
+
 @Service
 public class QuestionService {
 	
@@ -22,8 +21,12 @@ public class QuestionService {
 	private QuestionRepository questionRepository;
 	@Autowired
 	private AnswerRepository answerRepository;
+	@Autowired
+	private QuestionNextRepository questionNextRepository;
 	private IQuestion question;
 	private QuestionRecord questionRecord;
+	private QuestionNext questionNext;
+	
 	
 	/**
 	 * Return the next question of the specific user UUID. Return QuestionEmpty when
@@ -57,15 +60,26 @@ public class QuestionService {
 		questionRepository.save(question);
 		System.out.println("--- Answer saved");
 	}
+	/**
+	 * Set new question to the database.
+	 * @param uuid
+	 * @param newQuestion
+	 * @return
+	 */
 	public String setNewQuestion(String uuid, NewQuestion newQuestion) {
-		Integer index;
 		Question question = new Question();
 		Answer answer = new Answer();
+		QuestionNext questionNext;
 		String questionType = newQuestion.getQuestionType();
 		try {
 			questionRecord = questionRecordRepository.findById(uuid).get();
 		} catch (NoSuchElementException e) {
 			questionRecord = new QuestionRecord(uuid);
+		}
+		try {
+			questionNext = questionRecord.getQuestionNext();
+		} catch (Exception e1) {
+			questionNext = new QuestionNext();
 		}
 		question.setQuestionType(questionType);
 		question.setQuestion(newQuestion.getQuestion());
@@ -76,48 +90,32 @@ public class QuestionService {
 		switch (questionType) {
 		case "Trivia":
 			questionRecord.addTrivia(question);
-			try {
-				index = questionRecord.getListOfIndex().get(0) + 1;
-			} catch (Exception e) {
-				index = 0;
-			}
-			questionRecord.setNextQuestionIndex(0, index);
-			questionRecordRepository.save(questionRecord);
+			questionRecord.getQuestionNext().setTriviaIndex(0);
 			break;
 		case "Poll":
 			questionRecord.addPoll(question);
-			try {
-				index = questionRecord.getListOfIndex().get(1) + 1;
-			} catch (Exception e) {
-				index = 0;
-			}
-			questionRecord.setNextQuestionIndex(1, index);
-			questionRecordRepository.save(questionRecord);
+			questionRecord.getQuestionNext().setPollIndex(0);
 			break;
 		case "Checkbox":
 			questionRecord.addCheckbox(question);
-			try {
-				index = questionRecord.getListOfIndex().get(2) + 1;
-			} catch (Exception e) {
-				index = 0;
-			}
-			questionRecord.setNextQuestionIndex(2, index);
-			questionRecordRepository.save(questionRecord);
+			questionRecord.getQuestionNext().setCheckboxIndex(0);
 			break;
 		default:
 			questionRecord.addMatrix(question);
-			try {
-				index = questionRecord.getListOfIndex().get(3) + 1;
-			} catch (Exception e) {
-				index = 0;
-			}
-			questionRecord.setNextQuestionIndex(3, index);
-			questionRecordRepository.save(questionRecord);
+			questionRecord.getQuestionNext().setMatrixIndex(0);
 			break;
 		}
+		questionNextRepository.save(questionNext);
+		questionRecordRepository.save(questionRecord);
 		System.out.println("--- Question saved");
 		return "--- Question saved!";
 	}
+	/**
+	 * Delete question with id given.
+	 * @param uuid
+	 * @param qId
+	 * @return
+	 */
 	public IQuestion deleteQuestion(String uuid, String qId) {
 		Question question;
 		Integer questionId = Integer.parseInt(qId);;
@@ -127,33 +125,34 @@ public class QuestionService {
 			return new QuestionEmpty(uuid);
 		}
 		questionRecord = questionRecordRepository.findById(uuid).get();
+		questionNext = questionRecord.getQuestionNext();
 		String questionType = question.getQuestionType();
-		System.out.println(questionId);
 		questionRepository.deleteById(questionId);
 		answerRepository.deleteById(question.getAnswerOffered().getId());
 		switch (questionType) {
 		case "Trivia":
-			if (questionRecord.getListOfIndex().get(0) == questionId) {
-			questionRecord.setNextQuestionIndex(0, questionRecord.getListOfTrivia().get(0).getId());
-			}
-			
+			questionRecord.removeTrivia(question);
+			if (questionRecord.getListOfTrivia().size() > 0) questionNext.setTriviaIndex(0);
+			else questionNext.setTriviaIndex(null);
 			break;
 		case "Poll":
-			if (questionRecord.getListOfIndex().get(1) == questionId) {
-			questionRecord.setNextQuestionIndex(1, questionRecord.getListOfPoll().get(0).getId());
-			}
+			questionRecord.removePoll(question);
+			if (questionRecord.getListOfPoll().size() > 0) questionNext.setPollIndex(0);
+			else questionNext.setPollIndex(null);
 			break;
 		case "Checkbox":
-			if (questionRecord.getListOfIndex().get(2) == questionId) {
-			questionRecord.setNextQuestionIndex(2, questionRecord.getListOfCheckbox().get(0).getId());
-			}
+			questionRecord.removeCheckbox(question);
+			if (questionRecord.getListOfCheckbox().size() > 0) questionNext.setCheckboxIndex(0);
+			else questionNext.setCheckboxIndex(null);
 			break;
 		default:
-			if (questionRecord.getListOfIndex().get(3) == questionId) {
-				questionRecord.setNextQuestionIndex(3, questionRecord.getListOfMatrix().get(0).getId());
-				}
+			questionRecord.removeMatrix(question);
+			if (questionRecord.getListOfMatrix().size() > 0) questionNext.setMatrixIndex(0);
+			else questionNext.setMatrixIndex(null);
 			break;
 		}
+		questionNextRepository.save(questionNext);
+		System.out.println("--- Question deleted!");
 		return new QuestionEmpty("--- Question deleted!");
 	}
 	/**
@@ -163,13 +162,13 @@ public class QuestionService {
 	private IQuestion getQuestion() { 
 		switch (questionRecord.getNextQuestionType()) {
 		case "Trivia":
-			return questionRecord.getTriviaByIndex(questionRecord.getListOfIndex().get(0));
+			return questionRecord.getTriviaByIndex(questionRecord.getQuestionNext().getTriviaIndex());
 		case "Poll":
-			return questionRecord.getPollByIndex(questionRecord.getListOfIndex().get(1));
+			return questionRecord.getPollByIndex(questionRecord.getQuestionNext().getPollIndex());
 		case "Checkbox":
-			return questionRecord.getCheckboxByIndex(questionRecord.getListOfIndex().get(2));
+			return questionRecord.getCheckboxByIndex(questionRecord.getQuestionNext().getCheckboxIndex());
 		default:
-			return questionRecord.getMatrixByIndex(questionRecord.getListOfIndex().get(3));
+			return questionRecord.getMatrixByIndex(questionRecord.getQuestionNext().getMatrixIndex());
 		}
 	}
 	/**
@@ -213,24 +212,26 @@ public class QuestionService {
 	 */
 	private void updateNextQuestionIndex(String newQuestionType) {
 		Integer index;
+		questionNext = questionRecord.getQuestionNext();
 		switch (newQuestionType) {
 		case "Trivia":
-			index = (questionRecord.getListOfIndex().get(0) + 1) % questionRecord.getListOfTrivia().size();
-			questionRecord.setNextQuestionIndex(0, index);
+			index = (questionNext.getTriviaIndex() + 1) % questionRecord.getListOfTrivia().size();
+			questionNext.setTriviaIndex(index);
 			break;
 		case "Poll":
-			index = (questionRecord.getListOfIndex().get(1) + 1) % questionRecord.getListOfPoll().size();
-			questionRecord.setNextQuestionIndex(1, index);
+			index = (questionNext.getPollIndex() + 1) % questionRecord.getListOfPoll().size();
+			questionNext.setPollIndex(index);
 			break;
 		case "Checkbox":
-			index = (questionRecord.getListOfIndex().get(2) + 1) % questionRecord.getListOfCheckbox().size();
-			questionRecord.setNextQuestionIndex(2, index);
+			index = (questionNext.getCheckboxIndex() + 1) % questionRecord.getListOfCheckbox().size();
+			questionNext.setCheckboxIndex(index);
 			break;
 		default:
-			index = (questionRecord.getListOfIndex().get(3) + 1) % questionRecord.getListOfMatrix().size();
-			questionRecord.setNextQuestionIndex(3, index);
+			index = (questionNext.getMatrixIndex() + 1) % questionRecord.getListOfMatrix().size();
+			questionNext.setMatrixIndex(index);
 			break;
 		}
+		questionNextRepository.save(questionNext);
 	}
 	
 }

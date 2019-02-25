@@ -1,13 +1,12 @@
 package instigator.rest_api.QA.question;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 public class QuestionRecord { 
@@ -22,8 +21,8 @@ public class QuestionRecord {
 	private List<Question> listOfCheckbox;
 	@OneToMany
 	private List<Question> listOfMatrix;
-	@ElementCollection
-	private List<Integer> listOfIndex;
+	@OneToOne
+	private QuestionNext questionNext;
 	private String nextQuestionType;
 	
 	public QuestionRecord() {
@@ -32,7 +31,7 @@ public class QuestionRecord {
 		listOfPoll = new ArrayList<>();
 		listOfCheckbox = new ArrayList<>();
 		listOfMatrix = new ArrayList<>();
-		listOfIndex = new ArrayList<>(); 
+		questionNext = new QuestionNext();
 	}
 	
 	public QuestionRecord(String uuid) {
@@ -41,7 +40,7 @@ public class QuestionRecord {
 		listOfPoll = new ArrayList<>();
 		listOfCheckbox = new ArrayList<>();
 		listOfMatrix = new ArrayList<>();
-		listOfIndex = new ArrayList<>(); 
+		questionNext = new QuestionNext();
 		System.out.println("--- QuestionRecord initialized");
 	}
 	
@@ -101,11 +100,11 @@ public class QuestionRecord {
 	 * [0] is for trivia, [1] for poll, [2] for checkbox and [3] for matrix
 	 * @return List<Integer>
 	 */
-	public List<Integer> getListOfIndex() {
-		return listOfIndex;
+	public QuestionNext getQuestionNext() {
+		return questionNext;
 	}
-	public void setNextQuestionIndex(int ix, Integer index) {
-		this.listOfIndex.set(ix, index);
+	public void setQuestionNext(QuestionNext questionNext) {
+		this.questionNext = questionNext;
 	}
 
 	public String getNextQuestionType() {
@@ -126,12 +125,24 @@ public class QuestionRecord {
 	public List<Question> getListOfMatrix() {
 		return listOfMatrix;
 	}
+	public void removeTrivia(Question question) {
+		listOfTrivia.remove(question);		
+	}
+	public void removePoll(Question question) {
+		listOfPoll.remove(question);
+	}
+	public void removeCheckbox(Question question) {
+		listOfCheckbox.remove(question);
+	}
+	public void removeMatrix(Question question) {
+		listOfMatrix.remove(question);
+	}
 
 	@Override
 	public String toString() {
 		return "QuestionRecord [uuid=" + uuid + ", listOfTrivia=" + listOfTrivia + ", listOfPoll=" + listOfPoll
-				+ ", listOfCheckbox=" + listOfCheckbox + ", listOfMatrix=" + listOfMatrix + ", listOfIndex="
-				+ listOfIndex + ", nextQuestionType=" + nextQuestionType + "]";
+				+ ", listOfCheckbox=" + listOfCheckbox + ", listOfMatrix=" + listOfMatrix + ", questionNext="
+				+ questionNext + ", nextQuestionType=" + nextQuestionType + "]";
 	}
 	
 	

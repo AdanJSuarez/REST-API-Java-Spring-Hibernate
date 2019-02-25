@@ -58,23 +58,5 @@ public class NewQuestion implements IQuestion {
 		// TODO Auto-generated method stub
 
 	}
-	
-	/*
-	 * {
-  "id": 7,
-  "questionType": "Checkbox",
-  "question": "What are the color do you like?",
-  "answerOffered": {
-    "id": 3,
-    "answer": {
-      "Red": "",
-      "Blue": "",
-      "Purple": "",
-      "Yellow": "",
-      "Black": "",
-      "Green": ""
-    }
-  },
-	 */
 
 }
