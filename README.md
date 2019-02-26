@@ -16,6 +16,8 @@ In the code we find some test, far for being enough. Just a couple of them to sh
 
 From the title of the repo you can guess what we use here but let me be more specific: Java, Spring (Spring boot), Hibernate (Spring JPA Data), MySQL and docker.
 
+Error handling is pretty basic. To be enough resilient it need more work in this part.
+
 Security: There are many issues here but thinking about the very basic, first we create a user in the database with all the permission that in real production we never do. The connections to the server is through a http connection where we should use https and implement some authentication process.
 
 Scalability: To think about scalability we probably need to think about the whole architecture but, there is one thing to consider the first and it is make the code run asynchronous. All I/O operation should be async and not blocking to let it deal with a bigger amount of request, libraries like Apache Mina could help. Perhaps some load balancing software like NGinx, but depend of the architecture you choose to use. The last thing and less "famous" could be the dockerization of the database and make it distributed, ...but depend.  
