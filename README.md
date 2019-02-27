@@ -16,7 +16,7 @@ In the code we find some test, far for being enough. Just a couple of them to sh
 
 From the title of the repo you can guess what we use here but let me be more specific: Java, Spring (Spring boot), Hibernate (Spring JPA Data), MySQL and docker.
 
-Error handling is pretty basic. To be enough resilient it need more work in this part.
+Error handling is pretty basic. To be enough resilient it needs more work in this part.
 
 Security: There are many issues here but thinking about the very basic, first we create a user in the database with all the permission that in real production we never do. The connections to the server is through a http connection where we should use https and implement some authentication process.
 
